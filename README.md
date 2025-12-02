@@ -1,20 +1,17 @@
-# 8puzzle — GitHub Pages deployment
+## 8パズル（授業用ミニゲーム）
 
-This repository contains a small static 8-puzzle site. The repository is configured to automatically deploy to GitHub Pages on pushes to the `main` branch.
+このリポジトリは授業・演習向けのシンプルな8パズル（スライディングパズル）サイトです。教材として使いやすいよう、最小限の構成で提供しています。
 
-What was added
-- `.github/workflows/deploy-pages.yml` — GitHub Actions workflow that uploads the repo root as a Pages artifact and deploys it on push to `main`.
-- `.nojekyll` — prevents GitHub Pages from processing files with Jekyll.
+### できること
+- ブラウザ上で8パズルをプレイできます（シャッフル、リセット、ヒントなど）。
+- 静的ファイル（HTML/CSS/JS/画像）だけで動作します。
 
-How it works
-1. Push to `main`.
-2. The workflow runs and uploads the repository root as the Pages artifact.
-3. GitHub deploys the artifact to GitHub Pages. The Pages deployment is created automatically by the workflow.
+### 使い方（ローカルで確認する）
+1. リポジトリをクローンまたはダウンロードします。
+2. `index.html` をブラウザで直接開くか、簡易サーバーで提供します。
 
-Verify
-- After pushing, open the Actions tab on GitHub and inspect the `Deploy to GitHub Pages` run.
-- When the deployment finishes, the Pages URL will be available in the repository Settings → Pages page, or in the Actions run summary.
-
-Notes
-- If you later add a build step (for example a bundler or static site generator), update `deploy-pages.yml` to run the build and upload the build output directory instead of the repository root.
-- To use a custom domain, add a `CNAME` file to the repository root with your domain and configure DNS accordingly.
+### 主なファイル
+- `index.html` — ページ本体
+- `css/style.css` — スタイル
+- `js/script.js` — ゲームロジック（タイル描画、ヒント、タイマーなど）
+- `img/` — タイル画像等
