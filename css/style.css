@@ -58,13 +58,6 @@ h2 {
     background: #000;
 }
 
-.blurred { 
-    filter: blur(25px);
-    opacity: 0.4;
-    pointer-events: none; 
-    user-select: none; 
-}
-
 .controls {
     display: flex;
     justify-content: center;
