@@ -49,6 +49,7 @@ h2 {
     justify-content: center;
     font-size: 10px;
     line-height: 1;
+    z-index: 2;
     pointer-events: none;
 }
 
@@ -57,9 +58,27 @@ h2 {
     background: #000;
 }
 
+.blurred { 
+    filter: blur(25px);
+    opacity: 0.4;
+    pointer-events: none; 
+    user-select: none; 
+}
+
 .controls {
     display: flex;
     justify-content: center;
     gap: 8px;
     margin-top: 12px;
+}
+
+/* ヒント機能のときに追加 */
+.hint-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    color: orange;
+    z-index: 3;
+    pointer-events: none;
 }
