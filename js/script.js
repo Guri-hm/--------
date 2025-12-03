@@ -19,14 +19,15 @@ let emptyPosition = currentState.indexOf(EMPTY);
 // 初期状態を保存
 let initialState = currentState.slice();
 
-
 // ----------------- 描画関連 -----------------
 function renderTile(pos) {
+    if (typeof pos !== 'number') return;
+    
     const tiles = document.querySelectorAll('.player-tile');
-    if (!tiles) {
-        return;
-    }
+
     const el = tiles[pos];
+    if (!el) return;
+
     el.innerHTML = '';
     const val = currentState[pos];
     if (val !== EMPTY) {
@@ -43,51 +44,6 @@ function renderTile(pos) {
 
 function renderAll() {
     for (let i = 0; i < 9; i++) renderTile(i);
-}
-
-// ----------------- ユーティリティ / UI -----------------
-// 逆順数で解可能性を判定（3x3 の場合）
-function isSolvable(state) {
-    const arr = state.filter(v => v !== EMPTY);
-    let inv = 0;
-    for (let i = 0; i < arr.length; i++) {
-        for (let j = i + 1; j < arr.length; j++) {
-            if (arr[i] > arr[j]) inv++;
-        }
-    }
-    // 偶数なら解ける
-    return inv % 2 === 0;
-}
-
-function showMessage(msg) {
-    const controls = document.querySelector('.controls');
-    if (!controls) return;
-    let el = document.getElementById('message');
-    if (!el) {
-        el = document.createElement('div');
-        el.id = 'message';
-        el.style.color = 'crimson';
-        el.style.marginTop = '8px';
-        controls.appendChild(el);
-    }
-    el.textContent = msg;
-}
-
-function clearMessage() {
-    const el = document.getElementById('message');
-    if (el) el.remove();
-}
-
-function updateUIState() {
-    const solvable = isSolvable(currentState);
-    const btnHint = document.getElementById('hint');
-    if (btnHint) btnHint.disabled = !solvable;
-    
-    if (!solvable) {
-        showMessage('この盤面は解けません（逆順数が奇数）。並べ替え直すかシャッフルしてください。');
-    } else {
-        clearMessage();
-    }
 }
 
 // ----------------- 移動関連 -----------------
@@ -113,7 +69,7 @@ function onTileClick(position) {
             const elapsed = startTime ? (Date.now() - startTime) : 0;
             const timeStr = formatTime(elapsed);
             // DOM描画よりも先にアラートを表示(確実性は保障されない)
-            setTimeout(() => alert(`クリア！ 経過時間: ${timeStr} ヒント使用: ${hintCount} 回`), 50);
+            setTimeout(() => alert(`クリア！ 経過時間: ${timeStr}`), 50);
         }
     }
 }
@@ -122,7 +78,6 @@ function resetGame() {
     currentState = initialState.slice();
     emptyPosition = currentState.indexOf(EMPTY);
     renderAll();
-    updateUIState();
 }
 
 function shuffleMoves(times = 100) {
@@ -135,20 +90,13 @@ function shuffleMoves(times = 100) {
     // やり直し時に新しい盤面で再開できるように更新しておく
     initialState = currentState.slice();
     
-    updateUIState();
     resetTimer();
-    
-    const btnStart = document.getElementById('start');
-    if (btnStart) btnStart.disabled = false;
-    const btnHint = document.getElementById('hint');
-    if (btnHint) btnHint.disabled = true;
 }
 
 
 // ----------------- タイマー関連 ----------------------------
 
 let startTime = null;
-let hintCount = 0;
 
 function formatTime(ms) {
     const total = Math.max(0, Math.floor(ms));
@@ -168,19 +116,9 @@ function resetTimer() {
 
 
 // ----------------- ボタン処理まとめ -----------------
-function onStartClick() {
-    if (!startTime) startTimer();
-    
-    hintCount = 0;
-    
-    const btnStart = document.getElementById('start');
-    const btnHint = document.getElementById('hint');
-    if (btnStart) btnStart.disabled = true;
-    if (btnHint) btnHint.disabled = false;
-}
-
 function onShuffleClick() {
     shuffleMoves(100);
+    if (!startTime) startTimer();
 }
 
 function onResetClick() {
@@ -196,13 +134,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ボタンイベント登録
-    const btnStart = document.getElementById('start');
     const btnShuffle = document.getElementById('shuffle');
     const btnReset = document.getElementById('reset');
 
-    if (btnStart) btnStart.addEventListener('click', onStartClick);
     if (btnShuffle) btnShuffle.addEventListener('click', onShuffleClick);
     if (btnReset) btnReset.addEventListener('click', onResetClick);
 
-    updateUIState();
+    // タイマー開始
+    if (!startTime) startTimer();
 });
