@@ -90,17 +90,6 @@ function updateUIState() {
     }
 }
 
-// プレイヤー盤のぼかし制御
-function setPlayerBlur(enable) {
-    const playerBoard = document.querySelector('.board.player');
-    if (!playerBoard) return;
-    if (enable) {
-        playerBoard.classList.add('blurred');
-    } else {
-        playerBoard.classList.remove('blurred');
-    }
-}
-
 // ----------------- 移動関連 -----------------
 function canMove(clickedPosition) {
     return neighbors[emptyPosition].includes(clickedPosition);
@@ -148,7 +137,6 @@ function shuffleMoves(times = 100) {
     
     updateUIState();
     resetTimer();
-    setPlayerBlur(true);
     
     const btnStart = document.getElementById('start');
     if (btnStart) btnStart.disabled = false;
@@ -181,7 +169,6 @@ function resetTimer() {
 
 // ----------------- ボタン処理まとめ -----------------
 function onStartClick() {
-    setPlayerBlur(false);
     if (!startTime) startTimer();
     
     hintCount = 0;
